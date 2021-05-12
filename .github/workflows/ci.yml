@@ -26,7 +26,6 @@ jobs:
           fetch-depth: 0
       - name: lint
         uses: golangci/golangci-lint-action@v2
-        if: steps.api.outputs.changed == 'true'
         with:
           version: v1.34.1
           args: --timeout=5m0s
