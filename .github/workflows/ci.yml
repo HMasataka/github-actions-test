@@ -6,3 +6,28 @@ on:
       - main
       - develop
   pull_request:
+
+jobs:
+  test:
+    name: unit test
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    steps:
+      - name: lint
+        uses: golangci/golangci-lint-action@v2
+        if: steps.api.outputs.changed == 'true'
+        with:
+          working-directory: api
+          version: v1.34.1
+          args: --timeout=5m0s
+      - name: checkout
+        if: github.event_name == 'pull_request'
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: checkout
+        if: github.event_name == 'push'
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
